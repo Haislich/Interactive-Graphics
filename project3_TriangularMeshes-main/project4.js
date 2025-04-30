@@ -141,8 +141,6 @@ class MeshDrawer {
 			gl.STATIC_DRAW);
 
 		this.numVerts = vertPos.length / 3;
-
-		// texture coordinates ------------------------------------------------
 		this.hasTexCoords = (texCoords && texCoords.length);
 		if (this.hasTexCoords) {
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.tcBuffer);
@@ -170,27 +168,21 @@ class MeshDrawer {
 
 		gl.useProgram(this.prog);
 		gl.uniformMatrix4fv(this.u_mvp, false, trans);
-
-		// --- position attribute --------------------------------------------
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.posBuffer);
 		gl.vertexAttribPointer(this.a_pos, 3, gl.FLOAT, false, 0, 0);
 		gl.enableVertexAttribArray(this.a_pos);
-
-		// --- tex-coord attribute (if present) ------------------------------
 		if (this.hasTexCoords) {
 			gl.bindBuffer(gl.ARRAY_BUFFER, this.tcBuffer);
 			gl.vertexAttribPointer(this.a_textureCoordinates, 2, gl.FLOAT, false, 0, 0);
 			gl.enableVertexAttribArray(this.a_textureCoordinates);
 		}
-		else {   // disable to avoid stale state
+		else {
 			gl.disableVertexAttribArray(this.a_textureCoordinates);
 		}
 
-		// --- texture -------------------------------------------------------
 		gl.activeTexture(gl.TEXTURE0);
 		gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
-		// --- draw -----------------------------------------------------------
 		gl.drawArrays(gl.TRIANGLES, 0, this.numVerts);
 	}
 
